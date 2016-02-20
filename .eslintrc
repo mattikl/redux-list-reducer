@@ -1,0 +1,7 @@
+{
+  "extends": "rackt",
+  "rules": {
+    "array-bracket-spacing": 0
+  },
+}
+
