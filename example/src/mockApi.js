@@ -19,6 +19,8 @@ let TEAMS = [
   }
 ]
 
+// to make this example more like real world, use `setTimeout`
+// to mock API calls
 export default class Api {
   getTeams() {
     return new Promise(resolve =>
