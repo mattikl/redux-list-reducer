@@ -25,7 +25,7 @@ Supported actions:
 
 ### Usage
 
-See the example app under [example/](example/) and tests. Particularly, [teams.js](example/src/reducers/teams.js) shows how the library is used.
+See the example app under [example/](https://github.com/mattikl/redux-list-reducer/tree/master/example) and tests. Particularly, [teams.js](https://github.com/mattikl/redux-list-reducer/blob/master/example/src/reducers/teams.js) shows how the library is used.
 
 To run the example, you first need to build `redux-list-reducer` first:
 
