@@ -23,6 +23,7 @@ export default class List extends Component {
     const name = event.target.value
     if (name === '') return
     this.refs.addnew.value = ''
+    this.refs.addnew.focus()
     this.props.addPlayer(name, this.props.team)
   }
 
@@ -71,4 +72,5 @@ List.propTypes = {
   addPlayer: PropTypes.func.isRequired,
   deleteItem: PropTypes.func.isRequired,
   update: PropTypes.func.isRequired,
+  moveToList: PropTypes.func.isRequired,
 }

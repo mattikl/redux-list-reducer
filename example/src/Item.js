@@ -33,8 +33,7 @@ export default class Item extends Component {
       connectDragSource,
       connectDropTarget,
       player,
-      onMove,
-      ...rest } = this.props
+      onMove } = this.props
 
     return connectDragSource(connectDropTarget(
       <li>
@@ -42,4 +41,9 @@ export default class Item extends Component {
       </li>
     ))
   }
+}
+
+Item.propTypes = {
+  player: PropTypes.object.isRequired,
+  onMove: PropTypes.func.isRequired,
 }
