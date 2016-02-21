@@ -17,9 +17,9 @@ actions with lists.
 
 Supported actions:
 
-* `push(item)`
+* `push(item, list)`
 * `del(item)`
-* `update(item)`
+* `update(item, newItem)`
 * `move(item, toItem, before = true)`
 * `moveToList(item, list)`
 
@@ -27,17 +27,87 @@ Supported actions:
 
 See the example app under [example/](https://github.com/mattikl/redux-list-reducer/tree/master/example) and tests. Particularly, [teams.js](https://github.com/mattikl/redux-list-reducer/blob/master/example/src/reducers/teams.js) shows how the library is used.
 
-To run the example, you first need to build `redux-list-reducer` first:
+In your [reducer](http://redux.js.org/docs/basics/Reducers.html) implementation that operates on lists of data:
+
+```javascript
+import listreducer from 'redux-list-reducer'
+
+// Define your own reducer
+// Rather than exporting this directly to use in `combineReducers`, pass this
+// as an argument to `listreducer`. Redux never calls this function directly,
+// but listReducer first tries to match its own actions, then if none
+// match it calls this function with the current state and action.
+
+const wrappedReducer = (state, action) => {
+  switch (action.type) {
+    case LOAD:
+      return action.result
+    default:
+      return state
+  }
+}
+
+// Create the final reducer and get the default actions
+
+const {reducer, actions} = listreducer({
+  initialState: [],
+  itemsField: 'items',
+  wrappedReducer
+})
+
+export default reducer
+
+// Define your actions (they can use actions exported by listreducer or
+// be completely independed), export them and the listreducer actions
+// you want to expose to the user
 
 ```
-npm install
-npm run build
-cd example
-npm install
-npm start
+
+The state `listreducer` operates on is an array list list objects.
+This can either be passed as `initialState` or loaded by the actions
+in `wrappedReducer`. The following could have been used as `initialState`
+in the example above:
+
+```javascript
+const initialState = [
+  {
+    items: [
+      {name: 'foo'},
+      {name: 'bar'},
+    ]
+  },
+  {
+    items: [
+      {name: 'baz'},
+    ]
+  }
+]
 ```
 
-And now you should have the example running on localhost port 5000.
+The property `items` was defined as `itemsField` in when calling
+`listreducer` above.
+
+
+### Installation
+
+Install from npm as a dependency of your project:
+
+```
+npm install redux-list-reducer --save
+```
+
+If you want to hack on the project, clone the repo, build it, then use `npm link` to
+access it from your project:
+
+```
+git clone https://github.com/mattikl/redux-list-reducer
+cd redux-list-reducer
+npm install
+npm build
+npm link
+cd /path/to/your/project
+npm link redux-list-reducer
+```
 
 ### Motivation
 
@@ -58,6 +128,8 @@ Comments and ideas welcome.
 
 * [ ] more documentation
 * [ ] error handling & safety checks
+* [ ] validate `params`
+* [ ] a version that uses `immutable-js`
 
 ### Thanks
 
