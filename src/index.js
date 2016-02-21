@@ -13,7 +13,7 @@ export default function (params = {}) {
     initialState,
     wrappedReducer,
     key,
-    itemsField
+    itemsProperty
   } = params
 
   // `key` is appended to each actions, so that `listreducer` can be
@@ -30,18 +30,18 @@ export default function (params = {}) {
         return state.map(list => list === action.list ?
           {
             ...list,
-            [itemsField]: [...list[itemsField], action.item]
+            [itemsProperty]: [...list[itemsProperty], action.item]
           } : list
         )
       case actions.DELETE:
         return state.map(list => ({
           ...list,
-          [itemsField]: list[itemsField].filter(item => item !== action.item)
+          [itemsProperty]: list[itemsProperty].filter(item => item !== action.item)
         }))
       case actions.UPDATE:
         return state.map(list => ({
           ...list,
-          [itemsField]: list[itemsField].map(item => item === action.item ? action.newItem : item)
+          [itemsProperty]: list[itemsProperty].map(item => item === action.item ? action.newItem : item)
         }))
       case actions.MOVE:
         return _move(state, action)
@@ -60,7 +60,7 @@ export default function (params = {}) {
 
     return state.map(list => ({
       ...list,
-      [itemsField]: Array.prototype.concat.apply([], list[itemsField].map(item => {
+      [itemsProperty]: Array.prototype.concat.apply([], list[itemsProperty].map(item => {
         if (item === action.item) {
           return []
         }
@@ -76,7 +76,7 @@ export default function (params = {}) {
 
   function _moveToList(state, action) {
     return state.map(list => {
-      const found = list[itemsField].find(item => item === action.item)
+      const found = list[itemsProperty].find(item => item === action.item)
       const isMoveTarget = list === action.list
 
       // cannot move item to its own list
@@ -87,14 +87,14 @@ export default function (params = {}) {
       if (found) {
         return {
           ...list,
-          [itemsField]: list[itemsField].filter(item => item !== action.item)
+          [itemsProperty]: list[itemsProperty].filter(item => item !== action.item)
         }
       }
 
       if (isMoveTarget) {
         return {
           ...list,
-          [itemsField]: [...list[itemsField], action.item]
+          [itemsProperty]: [...list[itemsProperty], action.item]
         }
       }
 

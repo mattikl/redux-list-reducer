@@ -18,7 +18,7 @@ const wrappedReducer = (state, action) => {
 const {reducer, actions} = listreducer({
   key: 'teams',
   initialState: [], // initial data is loaded asynchronously from the mock API
-  itemsField: 'players',
+  itemsProperty: 'players',
   wrappedReducer
 })
 

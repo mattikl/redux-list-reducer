@@ -51,7 +51,7 @@ const wrappedReducer = (state, action) => {
 
 const {reducer, actions} = listreducer({
   initialState: [],
-  itemsField: 'items',
+  itemsProperty: 'items',
   wrappedReducer
 })
 
@@ -84,7 +84,7 @@ const initialState = [
 ]
 ```
 
-The property `items` was defined as `itemsField` in when calling
+The property `items` was defined as `itemsProperty` in when calling
 `listreducer` above.
 
 

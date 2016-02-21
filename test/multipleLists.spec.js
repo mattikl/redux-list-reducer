@@ -25,7 +25,7 @@ describe('listreducer (with lists)', () => {
 
   const {reducer, actions} = listreducer({
     initialState: [],
-    itemsField: 'players'
+    itemsProperty: 'players'
   })
 
   it('returns state when action is unknown', () => {
