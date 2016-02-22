@@ -4,8 +4,12 @@
 [Redux](http://rackt.github.io/redux) reducers that
 operate on lists.
 
-**This is an early version, do not use in production yet,
+**This is an early version and still a work in progress, do not use in production yet,
 expect the interface to change.**
+
+Read **[Thoughts](#thoughts)** before using this module.
+
+### Current Approach
 
 The lists are expected to contain JavaScript objects, and each object
 can exists only once in all lists. Currently, object identity is used
@@ -109,20 +113,32 @@ cd /path/to/your/project
 npm link redux-list-reducer
 ```
 
-### Motivation
+### Thoughts
 
 I started implementing drag & drop within a list and between lists, then realized
 that with current tools all complexity lies in the reducer implementation.
+This module is my attempt to abstract away that complexity and make reducer
+implementation simple. For simple data models it succeeds in this, as can be
+seen in the [example app](https://github.com/mattikl/redux-list-reducer/tree/master/example).
 
-I have yet to see any reducer factory gain widespread usage, so I am still
-hesitant about the feasibility of this idea. I'm going to use this in a couple
-of real world projects to test the idea.
+However, for larger applications the correct approach seems to be normalizing
+nested API objects, then placing each object in its own context reducer,
+and the list reducers contain IDs to these objects. [flux-react-router-example](https://github.com/gaearon/flux-react-router-example) is an example of this using [normalizr](https://github.com/gaearon/normalizr).
 
-From a design perspective, extensibility of this reducer is key. Currently,
-the implementation places strict constraints on data and the only way to
-extend provided actions is to redefine them in `wrappedReducer`.
+I have yet to see any reducer factory gain widespread usage. It looks like the primary
+design goal is to keep reducers so simple that no factories are needed. [redux-crud](https://github.com/Versent/redux-crud) is an example of a library that provides standard actions and reducers for Redux CRUD Applications, and you can also wrap its recuder in your own reducer.
 
-Comments and ideas welcome.
+When using a factory like this, you need to understand how it works. The question is how much of
+its internals you need to understand, and can you count on the internals to stay the same
+(semantic versioning provides guarantees that the interface won't change in a backwards incompatible
+manner but says nothing about the internals). The factory approach helps you to start out quick,
+so it may be a good tool for prototyping.
+
+On the one hand using object identity instead of external IDs feels more correct,
+ot the other using IDs can make things much simpler.
+
+I will continue playing with this idea and learning more, but can say nothing at the where this
+project is going. Comments and ideas welcome.
 
 ### TODO
 
