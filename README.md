@@ -11,13 +11,21 @@ Read **[Thoughts](#thoughts)** before using this module.
 
 ### Current Approach
 
-The lists are expected to contain JavaScript objects, and each object
-can exists only once in all lists. Currently, object identity is used
-to identify both lists and objects. The user is expected to handle the
-data in immutable fashion.
+The reducer works on lists, which are expected to contain unique items
+among all lists. The items can be of any type as long as for any
+two items a and b `a !== b` holds. At the moment there are no
+checks that the user doesn't include the same item twice.
 
-Idea is to develop a well-tested and performant implementation of basic
-actions with lists.
+There are two practical options for items:
+
+* items are JavaScript objects
+* the objects themselves are kept in a separate recuder and the items are
+  object IDs (integer or UUID) (normalized schema)
+
+The user is expected to handle the data in immutable fashion. Currently just
+plain JavaScript collections are used, but this might change to
+[ImmutableJs](https://facebook.github.io/immutable-js/). Idea is to develop a
+well-tested and performant implementation of basic actions with lists.
 
 Exported action creators:
 
@@ -139,13 +147,6 @@ ot the other using IDs can make things much simpler.
 
 I will continue playing with this idea and learning more, but can say nothing at the moment where this
 project is going. Comments and ideas welcome.
-
-### TODO
-
-* [ ] more documentation
-* [ ] error handling & safety checks
-* [ ] validate `params`
-* [ ] a version that uses `immutable-js`
 
 ### Thanks
 
