@@ -29,11 +29,13 @@ well-tested and performant implementation of basic actions with lists.
 
 Exported action creators:
 
-* `push(item, list)`
-* `del(item)`
-* `update(item, newItem)`
-* `move(item, toItem, before = true)`
-* `moveToList(item, list)`
+| Action creator  | Explanation |
+| --------------- | ------- |
+| `push(item, list)` | Add `item` to `list` |
+| `del(item)` | Delete `item` if it exists on any list, otherwise return the current state |
+| `update(item, newItem)` | Update `item` with `newItem` |
+| `move(item, toItem, before = true)` | Move `item` before/after `toItem` (Currently if `toItem` is not found `item` just gets deleted) |
+| `moveToList(item, list)` | Moves `item` to `list`, use this if the list is empty |
 
 ### Usage
 
