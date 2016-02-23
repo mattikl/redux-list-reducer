@@ -131,9 +131,10 @@ This module is my attempt to abstract away that complexity and make reducer
 implementation simple. For simple data models it succeeds in this, as can be
 seen in the [example app](https://github.com/mattikl/redux-list-reducer/tree/master/example).
 
-However, for larger applications the correct approach seems to be normalizing
+For larger applications the correct approach seems to be normalizing
 nested API objects, then placing each object in its own context reducer,
-and the list reducers contain IDs to these objects. [flux-react-router-example](https://github.com/gaearon/flux-react-router-example) is an example of this using [normalizr](https://github.com/gaearon/normalizr).
+and the list reducers contain IDs to these objects. [flux-react-router-example](https://github.com/gaearon/flux-react-router-example) is an example of this using [normalizr](https://github.com/gaearon/normalizr). This can be accomplished in placing list items
+in a separate reducer and storing their IDs in the list reducer.
 
 I have yet to see any reducer factory gain widespread usage. It looks like the primary
 design goal is to keep reducers so simple that no factories are needed. [redux-crud](https://github.com/Versent/redux-crud) is an example of a library that provides standard actions and reducers for Redux CRUD Applications, and you can also wrap its recuder in your own reducer.
@@ -147,7 +148,7 @@ so it may be a good tool for prototyping.
 On the one hand using object identity instead of external IDs feels more correct,
 ot the other using IDs can make things much simpler.
 
-I will continue playing with this idea and learning more, but can say nothing at the moment where this
+I will continue developing this project and learning more, but can say nothing at the moment where this
 project is going. Comments and ideas welcome.
 
 ### Thanks
