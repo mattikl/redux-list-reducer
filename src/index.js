@@ -138,7 +138,7 @@ export default function (params = {}) {
 
   return {
     reducer,
-    actions: {
+    actionCreators: {
       push,
       del,
       update,

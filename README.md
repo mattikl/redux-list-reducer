@@ -19,7 +19,7 @@ data in immutable fashion.
 Idea is to develop a well-tested and performant implementation of basic
 actions with lists.
 
-Supported actions:
+Exported action creators:
 
 * `push(item, list)`
 * `del(item)`
@@ -53,7 +53,7 @@ const wrappedReducer = (state, action) => {
 
 // Create the final reducer and get the default actions
 
-const {reducer, actions} = listreducer({
+const {reducer, actionCreators} = listreducer({
   initialState: [],
   itemsProperty: 'items',
   wrappedReducer
@@ -137,7 +137,7 @@ so it may be a good tool for prototyping.
 On the one hand using object identity instead of external IDs feels more correct,
 ot the other using IDs can make things much simpler.
 
-I will continue playing with this idea and learning more, but can say nothing at the where this
+I will continue playing with this idea and learning more, but can say nothing at the moment where this
 project is going. Comments and ideas welcome.
 
 ### TODO

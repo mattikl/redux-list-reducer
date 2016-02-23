@@ -23,7 +23,7 @@ describe('listreducer (with lists)', () => {
     },
   ]
 
-  const {reducer, actions} = listreducer({
+  const {reducer, actionCreators} = listreducer({
     initialState: [],
     itemsProperty: 'players'
   })
@@ -33,13 +33,13 @@ describe('listreducer (with lists)', () => {
   })
 
   it('can push an item', () => {
-    const action = actions.push({name: 'Tim'}, teams[1])
+    const action = actionCreators.push({name: 'Tim'}, teams[1])
     const state = reducer(teams, action)
     expect(state[1].players[2]).to.eql({name: 'Tim'})
   })
 
   it('can delete an item', () => {
-    const action = actions.del(teams[0].players[0])
+    const action = actionCreators.del(teams[0].players[0])
     const state = reducer(teams, action)
     expect(state[0].players.length).to.equal(1)
     expect(state[1].players.length).to.equal(2)
@@ -47,7 +47,7 @@ describe('listreducer (with lists)', () => {
   })
 
   it('can move an item before another item', () => {
-    const action = actions.move(teams[0].players[0], teams[1].players[0])
+    const action = actionCreators.move(teams[0].players[0], teams[1].players[0])
     const state = reducer(teams, action)
     expect(state[0].players.length).to.equal(1)
     expect(state[1].players.length).to.equal(3)
@@ -55,13 +55,13 @@ describe('listreducer (with lists)', () => {
   })
 
   it('returns state if item is moved to itself', () => {
-    const action = actions.move(teams[0].players[0], teams[0].players[0])
+    const action = actionCreators.move(teams[0].players[0], teams[0].players[0])
     const state = reducer(teams, action)
     expect(state).to.eql(teams)
   })
 
   it('can move an item to another list', () => {
-    const action = actions.moveToList(teams[0].players[1], teams[2])
+    const action = actionCreators.moveToList(teams[0].players[1], teams[2])
     const state = reducer(teams, action)
     expect(state[0].players.length).to.equal(1)
     expect(state[1].players.length).to.equal(2)

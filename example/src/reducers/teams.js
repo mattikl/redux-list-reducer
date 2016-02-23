@@ -15,7 +15,7 @@ const wrappedReducer = (state, action) => {
   }
 }
 
-const {reducer, actions} = listreducer({
+const {reducer, actionCreators} = listreducer({
   key: 'teams',
   initialState: [], // initial data is loaded asynchronously from the mock API
   itemsProperty: 'players',
@@ -23,13 +23,13 @@ const {reducer, actions} = listreducer({
 })
 
 // the reducer is exported as the default export and the
-// actions as named exports in style of Redux Ducks
+// action creators as named exports in style of Redux Ducks
 
 export default reducer
 
 // We create async actions for loading data from the mocked API
 // and adding new data. load() calls our own action while
-// addPlayer() calls an action from the library
+// addPlayer() calls an action creator from the library
 
 export function load() {
   return dispatch => api.getTeams().then(teams => dispatch({
@@ -39,12 +39,12 @@ export function load() {
 }
 
 export function addPlayer(name, team) {
-  return dispatch => api.createPlayer(name).then(player => dispatch(actions.push(player, team)))
+  return dispatch => api.createPlayer(name).then(player => dispatch(actionCreators.push(player, team)))
 }
 
-// We can use the following actions straight from the library
+// We can use the following action creators straight from the library
 
-export const deleteItem = actions.del
-export const update = actions.update
-export const move = actions.move
-export const moveToList = actions.moveToList
+export const deleteItem = actionCreators.del
+export const update = actionCreators.update
+export const move = actionCreators.move
+export const moveToList = actionCreators.moveToList
