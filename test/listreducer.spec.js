@@ -22,4 +22,13 @@ describe('listreducer()', () => {
   it('must get itemsProperty', () => {
     expect(listreducer).to.throw(Error)
   })
+
+  it('throws if format not found', () => {
+    const createReducer = () => listreducer({
+      format: 'foobarbaz',
+      itemsProperty: 'items'
+    })
+    expect(createReducer).to.throw(/Unknown format/)
+  })
+
 })

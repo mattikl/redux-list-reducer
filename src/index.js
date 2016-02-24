@@ -20,9 +20,10 @@ export default function (params = {}) {
   }
 
   if (wrappedReducer !== undefined && ! typeof wrappedReducer === 'function') {
-    throw new Error('wrappedReducer must be a function')
+    throw new Error('wrappedReducer is defined, but it is not a function')
   }
 
+  const format = params.format || 'plain'
   const key = params.key || ''
 
   // `key` is appended to each actions, so that `listreducer` can be
@@ -33,82 +34,14 @@ export default function (params = {}) {
     [name]: `${ACTION_PREFIX}${name}-${key}`
   }), {})
 
-  function reducer(state = initialState, action) {
-    switch (action.type) {
-      case actions.PUSH:
-        return state.map(list => list === action.list ?
-          {
-            ...list,
-            [itemsProperty]: [...list[itemsProperty], action.item]
-          } : list
-        )
-      case actions.DELETE:
-        return state.map(list => ({
-          ...list,
-          [itemsProperty]: list[itemsProperty].filter(item => item !== action.item)
-        }))
-      case actions.UPDATE:
-        return state.map(list => ({
-          ...list,
-          [itemsProperty]: list[itemsProperty].map(item => item === action.item ? action.newItem : item)
-        }))
-      case actions.MOVE:
-        return _move(state, action)
-      case actions.MOVE_TO_LIST:
-        return _moveToList(state, action)
-      default:
-        return typeof wrappedReducer === 'function' ?
-          wrappedReducer(state, action) : state
-    }
-  }
+  let createReducer
 
-  function _move(state, action) {
-    if (action.item === action.toItem) {
-      return state
-    }
-
-    return state.map(list => ({
-      ...list,
-      [itemsProperty]: Array.prototype.concat.apply([], list[itemsProperty].map(item => {
-        if (item === action.item) {
-          return []
-        }
-
-        if (item === action.toItem) {
-          return action.before ? [action.item, item] : [item, action.item]
-        }
-
-        return [item]
-      }))
-    }))
-  }
-
-  function _moveToList(state, action) {
-    return state.map(list => {
-      const found = list[itemsProperty].find(item => item === action.item)
-      const isMoveTarget = list === action.list
-
-      // cannot move item to its own list
-      if (found && isMoveTarget) {
-        return list
-      }
-
-      if (found) {
-        return {
-          ...list,
-          [itemsProperty]: list[itemsProperty].filter(item => item !== action.item)
-        }
-      }
-
-      if (isMoveTarget) {
-        return {
-          ...list,
-          [itemsProperty]: [...list[itemsProperty], action.item]
-        }
-      }
-
-      return list
-    })
+  if (format === 'plain') {
+    createReducer = require('./plainReducer')
+  } else if (format === 'immutable') {
+    createReducer = require('./immutableReducer')
+  } else {
+    throw new Error(`Unknown format ${format}`)
   }
 
   /*
@@ -146,7 +79,7 @@ export default function (params = {}) {
   })
 
   return {
-    reducer,
+    reducer: createReducer(actions, itemsProperty, initialState, wrappedReducer),
     actionCreators: {
       push,
       del,
