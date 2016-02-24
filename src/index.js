@@ -12,9 +12,18 @@ export default function (params = {}) {
   const {
     initialState,
     wrappedReducer,
-    key,
     itemsProperty
   } = params
+
+  if (!itemsProperty) {
+    throw new Error('itemsProperty must be defined for listreducer')
+  }
+
+  if (wrappedReducer !== undefined && ! typeof wrappedReducer === 'function') {
+    throw new Error('wrappedReducer must be a function')
+  }
+
+  const key = params.key || ''
 
   // `key` is appended to each actions, so that `listreducer` can be
   // used multiple times in the same application. Otherwise all

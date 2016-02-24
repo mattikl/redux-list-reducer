@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import listreducer from '../src'
 
 describe('listreducer()', () => {
-  const {reducer, actionCreators} = listreducer()
+  const {reducer, actionCreators} = listreducer({itemsProperty: 'items'})
 
   it('is a function', () => {
     expect(listreducer).to.be.a('function')
@@ -17,5 +17,9 @@ describe('listreducer()', () => {
     ['push', 'update', 'del', 'move', 'moveToList'].forEach(name => {
       expect(actionCreators[name]).to.be.a('function')
     })
+  })
+
+  it('must get itemsProperty', () => {
+    expect(listreducer).to.throw(Error)
   })
 })
