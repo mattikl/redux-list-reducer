@@ -104,7 +104,7 @@ The property `items` was defined as `itemsProperty` in when calling
 
 #### Properties
 
-Properties can be used to track if `item` is e.g. selected or being edited.
+Properties can be used to track if an item is e.g. selected or being edited.
 Used properties must be passed to `listreducer` as params:
 
 ```javascript
@@ -121,11 +121,11 @@ if we're using React and rendering a list of players in a team, showing either
 ```javascript
 <ul>
   {
-    team.players.map((player, index) => {
+    team.players.map((player, index) =>
       team.editing.has(player) ?
           <EditPlayer ... />
         : <Player ... />
-    })
+    )
   }
 </ul>
 ```
