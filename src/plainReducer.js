@@ -56,8 +56,6 @@ export default (actions, itemsProperty, initialState = [], wrappedReducer, prope
         const newState = typeof wrappedReducer === 'function' ?
           wrappedReducer(state, action) : state
 
-        // TODO is it ok to throw here or should we just return state
-        // and warn in development?
         if (!Array.isArray(newState)) {
           throw new Error('state must be array')
         }
@@ -120,6 +118,8 @@ export default (actions, itemsProperty, initialState = [], wrappedReducer, prope
       const found = list[itemsProperty].find(item => item === action.item)
       let property = list[action.property]
       if (found) {
+        // TODO doing it inplace like this ruins redux time travel
+        // fix if plainReducer is here to stay
         if (property.has(action.item)) {
           property.delete(action.item)
         } else {
