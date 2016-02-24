@@ -1,5 +1,33 @@
-export default (actions, itemsProperty, initialState = [], wrappedReducer) => {
-  function reducer(state = initialState, action) {
+function initializeProperty() {
+  return new Set()
+}
+
+function createGuarantees(properties) {
+  return (state) => {
+    return state.map(list => {
+      if (typeof list !== 'object') {
+        throw new Error('list objects must be of type "object"')
+      }
+
+      properties.forEach(property => {
+        if (!list.property) {
+          list[property] = initializeProperty()
+        }
+      })
+
+      return list
+    })
+  }
+}
+
+export default (actions, itemsProperty, initialState = [], wrappedReducer, properties) => {
+  const guaranteeProperties = createGuarantees(properties)
+
+  if (!Array.isArray(initialState)) {
+    throw new Error('initialState must be array')
+  }
+
+  function reducer(state = guaranteeProperties(initialState), action) {
     switch (action.type) {
       case actions.PUSH:
         return state.map(list => list === action.list ?
@@ -22,9 +50,19 @@ export default (actions, itemsProperty, initialState = [], wrappedReducer) => {
         return _move(state, action)
       case actions.MOVE_TO_LIST:
         return _moveToList(state, action)
+      case actions.TOGGLE_PROPERTY:
+        return _toggleProperty(state, action)
       default:
-        return typeof wrappedReducer === 'function' ?
+        const newState = typeof wrappedReducer === 'function' ?
           wrappedReducer(state, action) : state
+
+        // TODO is it ok to throw here or should we just return state
+        // and warn in development?
+        if (!Array.isArray(newState)) {
+          throw new Error('state must be array')
+        }
+
+        return guaranteeProperties(newState)
     }
   }
 
@@ -74,6 +112,25 @@ export default (actions, itemsProperty, initialState = [], wrappedReducer) => {
       }
 
       return list
+    })
+  }
+
+  function _toggleProperty(state, action) {
+    return state.map(list => {
+      const found = list[itemsProperty].find(item => item === action.item)
+      let property = list[action.property]
+      if (found) {
+        if (property.has(action.item)) {
+          property.delete(action.item)
+        } else {
+          property.add(action.item)
+        }
+      }
+
+      return {
+        ...list,
+        [action.property]: property
+      }
     })
   }
 

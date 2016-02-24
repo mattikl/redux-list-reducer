@@ -25,7 +25,8 @@ describe('listreducer (with lists)', () => {
 
   const {reducer, actionCreators} = listreducer({
     initialState: [],
-    itemsProperty: 'players'
+    itemsProperty: 'players',
+    properties: ['selected']
   })
 
   it('returns state when action is unknown', () => {
@@ -69,4 +70,16 @@ describe('listreducer (with lists)', () => {
     expect(state[2].players[0]).to.eql({name: 'Rob'})
   })
 
+  it('sets property to false by default', () => {
+    const state = reducer(teams, '@@@@')
+    expect(state[0].selected.has(teams[0].players[1])).to.equal(false)
+  })
+
+  it('can toggle property', () => {
+    const action = actionCreators.toggleProperty('selected', teams[0].players[1])
+    const state = reducer(teams, action)
+    expect(state[0].selected.has(teams[0].players[1])).to.equal(true)
+    const newState = reducer(state, action)
+    expect(state[0].selected.has(teams[0].players[1])).to.equal(false)
+  })
 })

@@ -5,7 +5,8 @@ const ACTIONS = [
   'UPDATE',
   'DELETE',
   'MOVE',
-  'MOVE_TO_LIST'
+  'MOVE_TO_LIST',
+  'TOGGLE_PROPERTY'
 ]
 
 export default function (params = {}) {
@@ -19,12 +20,13 @@ export default function (params = {}) {
     throw new Error('itemsProperty must be defined for listreducer')
   }
 
-  if (wrappedReducer !== undefined && ! typeof wrappedReducer === 'function') {
+  if (wrappedReducer !== undefined && typeof wrappedReducer !== 'function') {
     throw new Error('wrappedReducer is defined, but it is not a function')
   }
 
   const format = params.format || 'plain'
   const key = params.key || ''
+  const properties = params.properties || []
 
   // `key` is appended to each actions, so that `listreducer` can be
   // used multiple times in the same application. Otherwise all
@@ -78,14 +80,29 @@ export default function (params = {}) {
     list
   })
 
+  // the plain format uses ES6 set for this, immutable uses Immutable.Set
+  // both have the same syntax .has(item) to determine if item has the property
+  const toggleProperty = (property, item) => {
+    if (!~properties.indexOf(property)) {
+      throw new Error(`Property ${property} not defined in listreducer`)
+    }
+
+    return {
+      type: actions.TOGGLE_PROPERTY,
+      property,
+      item
+    }
+  }
+
   return {
-    reducer: createReducer(actions, itemsProperty, initialState, wrappedReducer),
+    reducer: createReducer(actions, itemsProperty, initialState, wrappedReducer, properties),
     actionCreators: {
       push,
       del,
       update,
       move,
-      moveToList
+      moveToList,
+      toggleProperty
     }
   }
 }

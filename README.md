@@ -36,6 +36,7 @@ Exported action creators:
 | `update(item, newItem)` | Update `item` with `newItem` |
 | `move(item, toItem, before = true)` | Move `item` before/after `toItem` (Currently if `toItem` is not found `item` just gets deleted) |
 | `moveToList(item, list)` | Moves `item` to `list`, use this if the list is empty |
+| `toggleProperty(property, item)` | See [Properties](#properties) |
 
 ### Usage
 
@@ -101,6 +102,37 @@ const initialState = [
 The property `items` was defined as `itemsProperty` in when calling
 `listreducer` above.
 
+#### Properties
+
+Properties can be used to track if `item` is e.g. selected or being edited.
+Used properties must be passed to `listreducer` as params:
+
+```javascript
+const {reducer, actionCreators} = listreducer({
+  itemsProperty: 'items',
+  properties: ['selected', 'editing']
+})
+```
+
+Checking if property is active for item: `list[property].has(item)`. For example,
+if we're using React and rendering a list of players in a team, showing either
+`<EditPlayer>` or `<Player>` component based on property `editing`:
+
+```javascript
+<ul>
+  {
+    team.players.map((player, index) => {
+      team.editing.has(player) ?
+          <EditPlayer ... />
+        : <Player ... />
+    })
+  }
+</ul>
+```
+
+Then the editing state of the player can be toggled with
+`this.props.toggleProperty('selected', player)` assuming the `toggleProperty`
+action creator is bound to the component.
 
 ### Installation
 

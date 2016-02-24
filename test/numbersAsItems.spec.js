@@ -28,9 +28,20 @@ describe('listreducer (numbers as items)', () => {
   ]
 
   const {reducer, actionCreators} = listreducer({
+    key: 'reducer',
     initialState: [],
-    itemsProperty: 'items'
+    itemsProperty: 'items',
   })
+
+  const withProperty = listreducer({
+    key: 'propReducer',
+    initialState: [],
+    itemsProperty: 'items',
+    properties: ['selected']
+  })
+
+  const propReducer = withProperty.reducer
+  const propActionCreators = withProperty.actionCreators
 
   it('returns state when action is unknown', () => {
     expect(reducer(lists, {type: '@@@@'})).to.eql(lists)
@@ -73,4 +84,16 @@ describe('listreducer (numbers as items)', () => {
     expect(state[2].items[0]).to.eql(3)
   })
 
+  it('sets property to false by default', () => {
+    const state = propReducer(lists, '@@@@')
+    expect(state[0].selected.has(lists[0].items[1])).to.equal(false)
+  })
+
+  it('can toggle property', () => {
+    const action = propActionCreators.toggleProperty('selected', lists[0].items[1])
+    const state = propReducer(lists, action)
+    expect(state[0].selected.has(lists[0].items[1])).to.equal(true)
+    const newState = propReducer(state, action)
+    expect(state[0].selected.has(lists[0].items[1])).to.equal(false)
+  })
 })
