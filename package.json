@@ -12,6 +12,7 @@
     "build": "babel src --out-dir lib",
     "prepublish": "rimraf lib && npm run build",
     "lint": "eslint src",
+    "lint:fix": "npm run lint -- --fix",
     "test": "mocha --compilers js:babel-register --recursive",
     "test:watch": "npm test -- --watch"
   },
