@@ -43,5 +43,8 @@
     "eslint-config-rackt": "^1.1.1",
     "mocha": "^2.4.5",
     "rimraf": "^2.5.2"
+  },
+  "dependencies": {
+    "immutable": "^3.7.6"
   }
 }
