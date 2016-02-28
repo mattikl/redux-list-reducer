@@ -52,7 +52,7 @@ export default (actions, itemsProperty, initialState = [], wrappedReducer, prope
         return _moveToList(state, action)
       case actions.TOGGLE_PROPERTY:
         return _toggleProperty(state, action)
-      default:
+      default: {
         const newState = typeof wrappedReducer === 'function' ?
           wrappedReducer(state, action) : state
 
@@ -61,6 +61,7 @@ export default (actions, itemsProperty, initialState = [], wrappedReducer, prope
         }
 
         return guaranteeProperties(newState)
+      }
     }
   }
 
