@@ -94,6 +94,6 @@ describe('listreducer (numbers as items)', () => {
     const state = propReducer(lists, action)
     expect(state[0].selected.has(lists[0].items[1])).to.equal(true)
     const newState = propReducer(state, action)
-    expect(state[0].selected.has(lists[0].items[1])).to.equal(false)
+    expect(newState[0].selected.has(lists[0].items[1])).to.equal(false)
   })
 })

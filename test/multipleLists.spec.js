@@ -76,10 +76,11 @@ describe('listreducer (with lists)', () => {
   })
 
   it('can toggle property', () => {
-    const action = actionCreators.toggleProperty('selected', teams[0].players[1])
-    const state = reducer(teams, action)
-    expect(state[0].selected.has(teams[0].players[1])).to.equal(true)
+    const initialState = reducer(teams, '@@@@')
+    const action = actionCreators.toggleProperty('selected', initialState[0].players[1])
+    const state = reducer(initialState, action)
+    expect(state[0].selected.has(initialState[0].players[1])).to.equal(true)
     const newState = reducer(state, action)
-    expect(state[0].selected.has(teams[0].players[1])).to.equal(false)
+    expect(newState[0].selected.has(initialState[0].players[1])).to.equal(false)
   })
 })

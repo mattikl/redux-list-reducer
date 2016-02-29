@@ -1,5 +1,5 @@
-function initializeProperty() {
-  return new Set()
+function initializeProperty(values) {
+  return new Set(values)
 }
 
 function createGuarantees(properties) {
@@ -117,15 +117,14 @@ export default (actions, itemsProperty, initialState = [], wrappedReducer, prope
   function _toggleProperty(state, action) {
     return state.map(list => {
       const found = list[itemsProperty].find(item => item === action.item)
-      let property = list[action.property]
-      if (found) {
-        // TODO doing it inplace like this ruins redux time travel
-        // fix if plainReducer is here to stay
-        if (property.has(action.item)) {
-          property.delete(action.item)
-        } else {
-          property.add(action.item)
-        }
+      if (!found) return list
+
+      let property = initializeProperty(list[action.property])
+
+      if (property.has(action.item)) {
+        property.delete(action.item)
+      } else {
+        property.add(action.item)
       }
 
       return {
