@@ -20,8 +20,7 @@ class App extends Component {
         <h1>Teams</h1>
 
         <p>
-          Drag the players around, add new, delete. The "...rocks" button is
-          an example of updating values.
+          Drag the players around, add new, edit, delete.
         </p>
 
         { teams && teams.length ?
@@ -41,6 +40,7 @@ App.propTypes = {
   update: PropTypes.func.isRequired,
   move: PropTypes.func.isRequired,
   moveToList: PropTypes.func.isRequired,
+  toggleProperty: PropTypes.func.isRequired,
 }
 
 export default connect(state => ({

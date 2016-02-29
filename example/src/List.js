@@ -27,38 +27,68 @@ export default class List extends Component {
     this.props.addPlayer(name, this.props.team)
   }
 
-  _onKeyDown = event => {
+  _editPlayer = (player, name) => {
+    const updatedPlayer = {
+      ...player,
+      name
+    }
+    this.props.update(player, updatedPlayer)
+
+    // Calling `toggleProperty` here has no effect here on the UI,
+    // because `updatedPlayer` is now displayed. This call
+    // just removes the reference to `player` and allows it to be GC'd
+    this.props.toggleProperty('selected', player)
+  }
+
+  _onAddNewKeyDown = event => {
     if (event.keyCode === 13) {
       this.refs.addnew.blur()
     }
   }
 
   render() {
-    const { team, deleteItem, update, move, connectDropTarget } = this.props
+    const {
+      team,
+      deleteItem,
+      update,
+      move,
+      connectDropTarget,
+      toggleProperty } = this.props
 
     return connectDropTarget(
       <div>
         <span>Team {team.name}</span>
         <ul>
           {team.players.map((player, index) =>
-            <Item
-              key={index}
-              player={player}
-              onMove={move}
-            >
-              {player.name}
-              {' '}
-              <button onClick={deleteItem.bind(null, player)}>delete</button>
-              {' '}
-              <button onClick={update.bind(null, player, {...player, name: player.name + ' rocks'})}>...rocks</button>
-            </Item>
+            team.selected.has(player) ?
+              <li key={index}>
+                <input
+                  ref="editplayer"
+                  defaultValue={player.name}
+                  placeholder="Edit player"
+                  onBlur={event => this._editPlayer(player, event.target.value)}
+                  onKeyDown={event => event.keyCode === 13 && this.refs.editplayer.blur()}
+                />
+              </li>
+
+            : <Item
+                key={index}
+                player={player}
+                onMove={move}
+              >
+                {player.name}
+                {' '}
+                <button onClick={deleteItem.bind(null, player)}>delete</button>
+                {' '}
+                <button onClick={toggleProperty.bind(null, 'selected', player)}>Edit</button>
+              </Item>
           )}
           <li key="addnew">
             <input
               ref="addnew"
               placeholder="Add new"
               onBlur={this._addPlayer}
-              onKeyDown={this._onKeyDown}
+              onKeyDown={this._onAddNewKeyDown}
             />
           </li>
         </ul>
@@ -73,4 +103,5 @@ List.propTypes = {
   deleteItem: PropTypes.func.isRequired,
   update: PropTypes.func.isRequired,
   moveToList: PropTypes.func.isRequired,
+  toggleProperty: PropTypes.func.isRequired,
 }

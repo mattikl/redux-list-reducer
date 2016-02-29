@@ -19,6 +19,7 @@ const {reducer, actionCreators} = listreducer({
   key: 'teams',
   initialState: [], // initial data is loaded asynchronously from the mock API
   itemsProperty: 'players',
+  properties: ['selected'],
   wrappedReducer
 })
 
@@ -48,3 +49,4 @@ export const deleteItem = actionCreators.del
 export const update = actionCreators.update
 export const move = actionCreators.move
 export const moveToList = actionCreators.moveToList
+export const toggleProperty = actionCreators.toggleProperty
