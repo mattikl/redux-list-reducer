@@ -22,10 +22,9 @@ There are two practical options for items:
 * the objects themselves are kept in a separate recuder and the items are
   object IDs (integer or UUID) (normalized schema)
 
-The user is expected to handle the data in immutable fashion. Currently just
-plain JavaScript collections are used, but this might change to
-[ImmutableJs](https://facebook.github.io/immutable-js/). Idea is to develop a
-well-tested and performant implementation of basic actions with lists.
+The user is expected to handle the data in immutable fashion. Currently either
+JavaScript collections (default) or [ImmutableJs](https://facebook.github.io/immutable-js/)
+can be used. The idea is to develop a well-tested and performant implementation of basic actions with lists.
 
 Exported action creators:
 
@@ -101,6 +100,21 @@ const initialState = [
 
 The property `items` was defined as `itemsProperty` in when calling
 `listreducer` above.
+
+To use ImmutableJS, you need pass `format: 'immutable'` to listreducer, and the
+state needs to be an `Immutable.List` and the list objects `Immutable.Map`.
+To use the `initialState` from above:
+
+```javascript
+import Immutable from 'immutable'
+
+const {reducer, actionCreators} = listreducer({
+  initialState: Immutable.fromJS(initialState),
+  format: 'immutable'
+  itemsProperty: 'items',
+  wrappedReducer // needs to operate on Immutable objects
+})
+```
 
 #### Properties
 
