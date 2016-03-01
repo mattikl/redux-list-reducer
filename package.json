@@ -1,6 +1,6 @@
 {
   "name": "redux-list-reducer",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Reducer factory that implements common list actions",
   "main": "lib/index.js",
   "files": [
