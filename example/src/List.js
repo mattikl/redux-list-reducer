@@ -3,6 +3,8 @@ import { DropTarget } from 'react-dnd'
 
 import Item from './Item'
 
+
+// You can drop to a list if it's empty
 const target = {
   drop(targetProps, monitor) {
     const targetTeam = targetProps.team
@@ -19,6 +21,9 @@ const target = {
   connectDropTarget: connect.dropTarget()
 }))
 export default class List extends Component {
+
+  // abusing refs to keep the example simple and in one place
+
   _addPlayer = event => {
     const name = event.target.value
     if (name === '') return
@@ -28,6 +33,8 @@ export default class List extends Component {
   }
 
   _editPlayer = (player, name) => {
+    // it's important here that we don't mutate the player
+    // object but create a new one
     const updatedPlayer = {
       ...player,
       name
