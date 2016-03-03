@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { DropTarget } from 'react-dnd'
+import Immutable from 'immutable'
 
 import Item from './Item'
-
 
 // You can drop to a list if it's empty
 const target = {
@@ -11,7 +11,11 @@ const target = {
     const sourceProps = monitor.getItem()
     const sourcePlayer = sourceProps.player
 
-    if (!targetTeam.players.length) {
+    const count = isImmutable(targetTeam)
+      ? targetTeam.get('players').count()
+      : targetTeam.players.length
+
+    if (!count) {
       targetProps.moveToList(sourcePlayer, targetTeam)
     }
   }
@@ -35,10 +39,8 @@ export default class List extends Component {
   _editPlayer = (player, name) => {
     // it's important here that we don't mutate the player
     // object but create a new one
-    const updatedPlayer = {
-      ...player,
-      name
-    }
+    const updatedPlayer = _set(player, 'name', name)
+
     this.props.update(player, updatedPlayer)
 
     // Calling `toggleProperty` here has no effect here on the UI,
@@ -64,14 +66,14 @@ export default class List extends Component {
 
     return connectDropTarget(
       <div>
-        <span>Team {team.name}</span>
+        <span>Team {_get(team, 'name')}</span>
         <ul>
-          {team.players.map((player, index) =>
-            team.selected.has(player) ?
+          {_get(team, 'players').map((player, index) =>
+            _get(team, 'selected').has(player) ?
               <li key={index}>
                 <input
                   ref="editplayer"
-                  defaultValue={player.name}
+                  defaultValue={_get(player, 'name')}
                   placeholder="Edit player"
                   onBlur={event => this._editPlayer(player, event.target.value)}
                   onKeyDown={event => event.keyCode === 13 && this.refs.editplayer.blur()}
@@ -83,7 +85,7 @@ export default class List extends Component {
                 player={player}
                 onMove={move}
               >
-                {player.name}
+                {_get(player, 'name')}
                 {' '}
                 <button onClick={deleteItem.bind(null, player)}>delete</button>
                 {' '}
@@ -112,3 +114,9 @@ List.propTypes = {
   moveToList: PropTypes.func.isRequired,
   toggleProperty: PropTypes.func.isRequired,
 }
+
+// helpers to make this component work with ImmutableJS and plain objects
+
+const isImmutable = obj => Immutable.Map.isMap(obj)
+const _get = (obj, property) => isImmutable(obj) ? obj.get(property) : obj[property]
+const _set = (obj, property, value) => isImmutable(obj) ? obj.set(property, value) : { ...obj, [property]: value}

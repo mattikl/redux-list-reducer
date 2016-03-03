@@ -1,48 +1,41 @@
 import React, { Component, PropTypes } from 'react'
-import { connect } from 'react-redux'
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
-
-import List from './List'
-import * as teamActions from './reducers/teams'
+import { Link } from 'react-router'
 
 @DragDropContext(HTML5Backend)
-class App extends Component {
-  componentDidMount() {
-    this.props.load()
-  }
-
+export default class App extends Component {
   render() {
-    const { teams, ...actions } = this.props
 
     return (
       <div>
         <h1>Teams</h1>
 
         <p>
-          Drag the players around, add new, edit, delete.
+          Choose either <Link to="plain">plain example</Link> or
+          {' '}
+          <Link to="immutable">immutable example</Link>.
         </p>
 
-        { teams && teams.length ?
-            teams.map((team, index) => <List key={index} team={team} {...actions} />)
-          : <p>Loading teams...</p>
-        }
+        <div className="content">
+          {this.props.children}
+        </div>
       </div>
     )
   }
 }
 
-App.propTypes = {
-  teams: PropTypes.array.isRequired,
-  load: PropTypes.func.isRequired,
-  addPlayer: PropTypes.func.isRequired,
-  deleteItem: PropTypes.func.isRequired,
-  update: PropTypes.func.isRequired,
-  move: PropTypes.func.isRequired,
-  moveToList: PropTypes.func.isRequired,
-  toggleProperty: PropTypes.func.isRequired,
-}
+// App.propTypes = {
+//   teams: PropTypes.array.isRequired,
+//   load: PropTypes.func.isRequired,
+//   addPlayer: PropTypes.func.isRequired,
+//   deleteItem: PropTypes.func.isRequired,
+//   update: PropTypes.func.isRequired,
+//   move: PropTypes.func.isRequired,
+//   moveToList: PropTypes.func.isRequired,
+//   toggleProperty: PropTypes.func.isRequired,
+// }
 
-export default connect(state => ({
-  teams: state.teams
-}), teamActions)(App)
+// export default connect(state => ({
+//   teams: state.teams
+// }), teamActions)(App)
