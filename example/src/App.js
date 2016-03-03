@@ -24,18 +24,3 @@ export default class App extends Component {
     )
   }
 }
-
-// App.propTypes = {
-//   teams: PropTypes.array.isRequired,
-//   load: PropTypes.func.isRequired,
-//   addPlayer: PropTypes.func.isRequired,
-//   deleteItem: PropTypes.func.isRequired,
-//   update: PropTypes.func.isRequired,
-//   move: PropTypes.func.isRequired,
-//   moveToList: PropTypes.func.isRequired,
-//   toggleProperty: PropTypes.func.isRequired,
-// }
-
-// export default connect(state => ({
-//   teams: state.teams
-// }), teamActions)(App)
