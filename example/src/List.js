@@ -4,6 +4,11 @@ import Immutable from 'immutable'
 
 import Item from './Item'
 
+// This file implements a list component that accepts either a plain JS
+// or `Immutable.Map` as a prop. Still searching for best ways to handle
+// immutable data in React components, some thoughts here:
+// https://gist.github.com/jlongster/028c83ed09d99c09983a
+
 // You can drop to a list if it's empty
 const target = {
   drop(targetProps, monitor) {
